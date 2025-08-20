@@ -1,0 +1,422 @@
+<MAGNUM Fan Indonesia Website Trial 1.0Refqactoring>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAGNUM Fan Indonesia</title>
+  <meta name="description" content="Struktur HTML sederhana dan kreatif untuk situs MAGNUM Fan Indonesia – 5–10 produk baru + 50 tipe lainnya, siap untuk WordPress." />
+  <style>
+    /* =====================
+       DESIGN SYSTEM (NEW PALETTE)
+       ===================== */
+    :root{
+      --white:#FFFFFF;            /* white */
+      --white-2:#FAFAFA;          /* second white tone */
+      --light-gold:#d7b86f;       /* light gold */
+      --limelight:#EDECE9;        /* limelight */
+      --silver:#C0C0C0;           /* silver */
+      --ink:#121212;              /* neutral text */
+
+      --bg:linear-gradient(180deg,var(--white-2),var(--limelight));
+      --card:var(--light-silver);
+      --text:var(--ink);
+      --muted:#4a4a4a;
+      --ring:var(--light-gold);
+      --border:color-mix(in srgb, var(--silver) 70%, var(--light-gold) 90%);
+      --radius:16px; --radius-lg:22px;
+      --shadow:0 12px 30px rgba(0,0,0,.08);
+      --soft:0 8px 18px rgba(0,0,0,.06);
+      --max:1200px; --slow:800ms; --e: cubic-bezier(.18,.82,.24,1);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;color:var(--text);background:var(--bg)}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max);margin-inline:auto;padding:0 20px}
+
+    /* ===================== HEADER ===================== */
+    header{position:sticky;top:0;z-index:999;backdrop-filter:saturate(160%) blur(8px);background:color-mix(in srgb, var(--white) 78%, var(--light-gold) 22%/.12);border-bottom:1px solid var(--border)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:.7rem}
+    .brand-logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--light-gold),var(--silver));color:#111;font-weight:800;box-shadow:var(--soft)}
+    .brand-title{font-weight:800;letter-spacing:.2px}
+    .menu{display:flex;gap:16px}
+    .menu a{padding:8px 10px;border-radius:10px}
+    .menu a:hover{background:var(--limelight)}
+    .subnav{display:flex;gap:14px}
+    .pill{display:inline-flex;gap:.45rem;align-items:center;padding:.44rem .8rem;border-radius:999px;border:1px solid var(--border);background:var(--white-2)}
+    .btn{padding:.6rem 1rem;border-radius:12px;border:1px solid var(--border);background:var(--card)}
+    .btn-gold{background:var(--light-gold);border-color:var(--light-gold)}
+    .hamburger{display:none}
+
+    /* Megamenu */
+    .megamenu-wrap{position:relative}
+    .megamenu{position:absolute;left:0;right:0;top:calc(100% + 8px);background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:16px;display:none;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+    .megamenu-wrap:hover .megamenu, .megamenu-wrap:focus-within .megamenu{display:grid}
+    .megamenu a{border:1px solid var(--border);padding:10px;border-radius:12px;background:var(--limelight)}
+
+    /* ===================== HERO SLIDER ===================== */
+    .hero{position:relative;overflow:hidden}
+    .slides{display:grid;grid-auto-flow:column;grid-auto-columns:100%;scroll-snap-type:x mandatory;overflow:auto;scroll-behavior:smooth}
+    .slide{scroll-snap-align:start;min-height:58vh;display:grid;place-items:center;padding:56px 20px;position:relative}
+    .slide-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);display:grid;grid-template-columns:1.2fr 1fr;gap:20px;max-width:var(--max);width:100%;padding:26px}
+    .slide h1{margin:0;font-size:clamp(28px,4vw,44px)}
+    .slide p{color:var(--muted)}
+    .slider-controls{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:8px}
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--silver);border:1px solid #222;opacity:.6}
+    .dot.active{opacity:1;background:#222}
+
+    /* ===================== SECTION UTILS ===================== */
+    section{padding:56px 0}
+    h2{font-size:clamp(22px,3vw,32px);margin:.2rem 0 1rem}
+    .sub{color:var(--muted)}
+    .grid{display:grid;gap:16px}
+    .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+    /* ===================== FLIP CARDS ===================== */
+    .card{perspective:1000px}
+    .card-inner{position:relative;transform-style:preserve-3d;border-radius:18px;transition:transform var(--slow) var(--e)}
+    .card:hover .card-inner, .card:focus-within .card-inner{transform:rotateY(180deg)}
+    .face{min-height:250px;background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--soft);padding:14px;display:grid;align-content:space-between;backface-visibility:hidden}
+    .face.back{position:absolute;inset:0;transform:rotateY(180deg)}
+    .badge{position:absolute;top:12px;left:12px}
+
+    /* ===================== HORIZONTAL CAROUSEL ===================== */
+    .carousel{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;gap:8px}
+    .carousel-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc(50% - 20px);gap:16px;overflow:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:6px}
+    .carousel-item{scroll-snap-align:center}
+    .caro-btn{height:40px;border-radius:12px;border:1px solid var(--border);background:var(--card)}
+
+    /* ===================== FILTER BAR (50+ types) ===================== */
+    .filterbar{display:flex;flex-wrap:wrap;gap: 10px;margin:10px 0 20px}
+    .filterbar input{padding:.6rem .9rem;border-radius:12px;border:1px solid var(--border);min-width:240px}
+    .chip{border:1px solid var(--border);padding:.45rem .8rem;border-radius:999px;background:var(--white-2);cursor:pointer}
+    .chip.active{background:var(--light-gold)}
+
+    /* ===================== NEWS ===================== */
+    .news{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+    .news .item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:var(--soft)}
+
+    /* ===================== FOOTER ===================== */
+    footer{background:#0f0f0f;color:var(--white);margin-top:40px;border-top:1px solid #1d1d1d}
+    .foot{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;padding:28px 0}
+    .foot-left{display:flex;flex-direction:column;gap:10px}
+    .foot-logo{display:flex;gap:.7rem;align-items:center}
+    .foot-logo .brand-logo{background:linear-gradient(135deg,var(--light-gold),var(--silver));color:#111}
+    .foot-links{display:flex;gap:12px;flex-wrap:wrap}
+    .socials,.marketplaces{display:flex;gap:10px;flex-wrap:wrap}
+    .socials a,.marketplaces a{border:1px solid rgba(255,255,255,.2);padding:.55rem .8rem;border-radius:999px;background:rgba(255,255,255,.06)}
+    .copy{font-size:.92rem;opacity:.9}
+
+    /* ===================== MOTION ON SCROLL ===================== */
+    .reveal{opacity:0;transform:translateY(18px) scale(.985);transition:opacity 900ms ease, transform 1000ms var(--e)}
+    .reveal.in-view{opacity:1;transform:none}
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width:960px){
+      .menu,.subnav{display:none}
+      .hamburger{display:flex;flex-direction:column;gap:4px}
+      .hamburger span{width:24px;height:2px;background:#333}
+      .slide-card{grid-template-columns:1fr}
+      .grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .news{grid-template-columns:1fr}
+      .foot{grid-template-columns:1fr}
+      .carousel-track{grid-auto-columns:80%}
+    }
+  </style>
+</head>
+<body>
+  <!-- ===================== HEADER ===================== -->
+  <header>
+    <div class="container nav">
+      <a href="#home" class="brand" aria-label="MAGNUM Fan Indonesia">
+        <span class="brand-logo" aria-hidden="true">MF</span>
+        <span class="brand-title">MAGNUM Fan Indonesia</span>
+      </a>
+
+      <nav class="menu" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#tentang">Tentang Kami</a>
+        <a href="#karir">Karir</a>
+        <a href="#kontak">Kontak Kami</a>
+      </nav>
+
+      <div class="subnav">
+        <a href="#promo" class="pill">Promo</a>
+        <a href="#news" class="pill">Artikel Terbaru</a>
+        <a href="#event" class="pill">Event</a>
+        <a href="#brochure" class="pill">E-Brochure/Catalog</a>
+
+    </div>
+  </header>
+
+  <!-- ===================== HERO SLIDER ===================== -->
+  <div id="home" class="hero reveal">
+    <div class="slides" id="slides" aria-label="Hero slides">
+      <section class="slide">
+        <div class="slide-card">
+          <div>
+            <span class="pill">Baru Rilis</span>
+            <h1>Koleksi Kipas Angin Terbaru 2025: Senyap & Hemat Energi Untuk Kamu</h1>
+            <p> Untuk Membuat Ruangan Kamu Menjadi Lebih Aman, NyamanMotor DC, Baling Aerodinamis, dan Build berkualitas</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <a class="btn btn-gold" href="#produk">Lihat Produk</a>
+              <a class="btn" href="#cari-toko">Cari Toko Terdekat</a>
+            </div>
+          </div>
+          <img src="https://images.unsplash.com/photo-1606813907291-76b53b9e8a2d?q=80&w=1280&auto=format&fit=crop" alt="Kipas modern" />
+        </div>
+      </section>
+      <section class="slide">
+        <div class="slide-card">
+          <div>
+            <span class="pill">Untuk Distributor</span>
+            <h1>50+ Tipe, Stok Stabil, Garansi Resmi</h1>
+            <p>Materi promo siap pakai & dukungan marketplace.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <a class="btn btn-gold" href="#distributor">Gabung Mitra</a>
+              <a class="btn" href="#promo">Lihat Promo</a>
+            </div>
+          </div>
+          <img src="https://images.unsplash.com/photo-1580997353466-13c9d580d2b0?q=80&w=1280&auto=format&fit=crop" alt="Gudang stok" />
+        </div>
+      </section>
+    </div>
+    <div class="slider-controls" aria-hidden="true">
+      <span class="dot" data-slide="0"></span>
+      <span class="dot" data-slide="1"></span>
+    </div>
+  </div>
+
+  <!-- ===================== NEW PRODUCTS (5–10) ===================== -->
+  <section id="produk" class="container reveal">
+    <h2>Produk Terbaru</h2>
+    <p class="sub">5–10 model baru untuk 2025. Silahkan dilihat sesuai dengan spesifikasi anda.</p>
+    <div class="grid cols-4">
+      <!-- 4 contoh; duplikasi hingga 8–10 item -->
+      <article class="card"><div class="card-inner" tabindex="0"><div class="face"><span class="badge pill">BARU</span><img src="https://images.unsplash.com/photo-1508609540374-69fe5e7e1b69?q=80&w=800&auto=format&fit=crop" alt="Kipas berdiri"/><div><h3>MAGNUM Stand S2</h3><small>Rp 699.000</small></div></div><div class="face back"><h3>Spesifikasi</h3><ul><li>DC 28W</li><li>12 Kecepatan</li><li>Remote + Timer</li></ul><a class="btn btn-gold" href="#cari-toko">Beli</a></div></div></article>
+      <article class="card"><div class="card-inner" tabindex="0"><div class="face"><span class="badge pill">BARU</span><img src="https://images.unsplash.com/photo-1543807535-eceef2ed097f?q=80&w=800&auto=format&fit=crop" alt="Kipas dinding"/><div><h3>MAGNUM Wall W3</h3><small>Rp 449.000</small></div></div><div class="face back"><h3>Spesifikasi</h3><ul><li>Tahan Lama</li><li>Low Noise</li><li>Oscillation</li></ul><a class="btn btn-gold" href="#cari-toko">Beli</a></div></div></article>
+      <article class="card"><div class="card-inner" tabindex="0"><div class="face"><span class="badge pill">BARU</span><img src="https://images.unsplash.com/photo-1591091664998-5d182e96a9a0?q=80&w=800&auto=format&fit=crop" alt="Kipas plafon"/><div><h3>MAGNUM Ceiling C4</h3><small>Rp 899.000</small></div></div><div class="face back"><h3>Spesifikasi</h3><ul><li>52" + LED</li><li>Reverse Mode</li><li>Remote</li></ul><a class="btn btn-gold" href="#cari-toko">Beli</a></div></div></article>
+      <article class="card"><div class="card-inner" tabindex="0"><div class="face"><span class="badge pill">BARU</span><img src="https://images.unsplash.com/photo-1606813907291-76b53b9e8a2d?q=80&w=800&auto=format&fit=crop" alt="Kipas meja"/><div><h3>MAGNUM Breeze M1</h3><small>Rp 399.000</small></div></div><div class="face back"><h3>Spesifikasi</h3><ul><li>DC 18W</li><li>3 Mode + Timer</li><li>90° Oscillation</li></ul><a class="btn btn-gold" href="#cari-toko">Beli</a></div></div></article>
+    </div>
+  </section>
+
+  <!-- ===================== ALL TYPES (50+) ===================== -->
+  <section class="container reveal" aria-labelledby="allTitle">
+    <h2 id="allTitle">Semua Tipe (50+)</h2>
+    <p class="sub">Gunakan pencarian & kategori untuk menemukan model kipas angin yang pas.</p>
+    <div class="filterbar">
+      <input type="search" id="search" placeholder="Cari model, fitur, tipe..." aria-label="Cari produk"/>
+      <button class="chip active" data-cat="all">Semua</button>
+      <button class="chip" data-cat="meja">Meja</button>
+      <button class="chip" data-cat="berdiri">Berdiri</button>
+      <button class="chip" data-cat="dinding">Dinding</button>
+      <button class="chip" data-cat="plafon">Plafon</button>
+      <button class="chip" data-cat="industri">Industri</button>
+    </div>
+    <div class="grid cols-4" id="allProducts" aria-live="polite"></div>
+  </section>
+
+  <!-- ===================== DISTRIBUTOR HIGHLIGHTS (CAROUSEL) ===================== -->
+  <section id="distributor" class="container reveal">
+    <h2>Sorotan untuk Distributor</h2>
+    <p class="sub">Materi promosi, SKU stabil, dukungan listing marketplace.</p>
+    <div class="carousel">
+      <button class="caro-btn" id="caroPrev" aria-label="Sebelumnya">◀</button>
+      <div class="carousel-track" id="caroTrack">
+        <div class="carousel-item card"><div class="card-inner"><div class="face"><h3>Paket Foto Produk</h3><p>Resolusi tinggi semua varian.</p></div></div></div>
+        <div class="carousel-item card"><div class="card-inner"><div class="face"><h3>Template Desain</h3><p>Banner, feed, story.</p></div></div></div>
+        <div class="carousel-item card"><div class="card-inner"><div class="face"><h3>Garansi Resmi</h3><p>Jaringan layanan nasional.</p></div></div></div>
+        <div class="carousel-item card"><div class="card-inner"><div class="face"><h3>Promo Musiman</h3><p>Bundling & cashback.</p></div></div></div>
+      </div>
+      <button class="caro-btn" id="caroNext" aria-label="Berikutnya">▶</button>
+    </div>
+  </section>
+
+  <!-- ===================== PROMO ===================== -->
+  <section id="promo" class="container reveal">
+    <div class="slide-card" style="grid-template-columns:1fr 1.1fr">
+      <div>
+        <span class="pill">Promo</span>
+        <h2>Diskon hingga 30% di Official Store</h2>
+        <p class="sub">Tokopedia, Shopee, TikTok Shop, Lazada, Informa, Blibli.</p>
+        <a class="btn btn-gold" href="#cari-toko">Lihat Toko</a>
+      </div>
+      <img src="https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1280&auto=format&fit=crop" alt="Banner promo" />
+    </div>
+  </section>
+
+  <!-- ===================== NEWS ===================== -->
+  <section id="news" class="container reveal">
+    <h2>News &amp; Article</h2>
+    <div class="news">
+      <article class="item"><h3>Tips Memilih Kipas Angin dengan Watt Hemat Energi</h3><p>Kenali perbedaan motor AC vs DC, diameter baling, dan posisi ideal.</p><a class="btn" href="#">Baca</a></article>
+      <div class="grid cols-1">
+        <article class="item"><h4>Perawatan Kipas Plafon</h4><a class="btn" href="#">Baca</a></article>
+        <article class="item"><h4>Tips Sirkulasi Udara di dalam Apartemen</h4><a class="btn" href="#">Baca</a></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CARI TOKO ===================== -->
+  <section id="cari-toko" class="container reveal">
+    <h2>Cari Toko</h2>
+    <p class="sub">Temukan gerai terdekat atau kunjungi official store kami di marketplace.</p>
+    <div class="grid cols-3">
+      <div class="card"><div class="card-inner"><div class="face"><h3>Jakarta Pusat</h3><p>Jl. Alaydrus No 84D, Petojo Utara, Gambir</p><a class="btn" href="#">Petakan</a></div></div></div>
+      <div class="card"><div class="card-inner"><div class="face"><h3>Online Store</h3><p>Tokopedia, Shopee, TikTok, Lazada, Informa, Blibli</p><a class="btn" href="#">Kunjungi</a></div></div></div>
+      <div class="card"><div class="card-inner"><div class="face"><h3>Hubungi Sales</h3><p>Konsultasi kebutuhan proyek & grosir</p><a class="btn" href="#kontak">Kontak</a></div></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== DUKUNGAN ===================== -->
+  <section id="dukungan" class="container reveal">
+    <h2>Dukungan</h2>
+    <div class="grid cols-3">
+
+      <div class="card"><div class="card-inner"><div class="face"><h3>Unduh Manual</h3><p>Silahkan diunduh PDF panduan pemasangan & perawatan.</p><a class="btn" href="#">Unduh</a></div></div></div>
+      <div class="card"><div class="card-inner"><div class="face"><h3>Klaim Garansi</h3><p>Klaim Disini Untuk Formulir & Prosedur Garansi.</p><a class="btn" href="#">Ajukan</a></div></div></div>
+      <div class="card"><div class="card-inner"><div class="face"><h3>Service Center</h3><p>Lokasi & Jadwal Operasional berlaku sesuai Jam Kerja Kami.</p><a class="btn" href="#">Lihat</a></div></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== TENTANG, KARIR, KONTAK ===================== -->
+  <section id="tentang" class="container reveal">
+    <h2>Tentang MAGNUM FAN Indonesia</h2>
+    <p class="sub">Inovasi kipas sejak 1998 – efisiensi, ketahanan, desain modern.</p>
+  </section>
+
+  <section id="karir" class="container reveal">
+    <h2>Career</h2>
+    <p class="sub">Bergabung dengan tim kami: R&amp;D, QC, Sales, dan Marketing.</p>
+    <a class="btn btn-gold" href="#">Lihat Lowongan</a>
+  </section>
+
+  <section id="kontak" class="container reveal">
+    <h2>Kontak Kami</h2>
+    <form class="grid cols-2" onsubmit="event.preventDefault(); alert('Terima kasih! Pesan Anda sudah terkirim.');">
+      <input required placeholder="Nama" aria-label="Nama" style="padding:.8rem;border-radius:12px;border:1px solid var(--border)" />
+      <input required type="email" placeholder="Email" aria-label="Email" style="padding:.8rem;border-radius:12px;border:1px solid var(--border)" />
+      <input placeholder="Subjek" aria-label="Subjek" style="padding:.8rem;border-radius:12px;border:1px solid var(--border)" />
+      <input placeholder="Telepon" aria-label="Telepon" style="padding:.8rem;border-radius:12px;border:1px solid var(--border)" />
+      <textarea rows="4" placeholder="Pesan" aria-label="Pesan" style="grid-column:1/-1;padding:.8rem;border-radius:12px;border:1px solid var(--border)"></textarea>
+      <button class="btn btn-gold" style="grid-column:1/-1;justify-self:start">Kirim</button>
+    </form>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="container foot">
+      <div class="foot-left">
+        <div class="foot-logo">
+          <span class="brand-logo" aria-hidden="true">MF</span>
+          <span class="brand-title">MAGNUM Fan Indonesia</span>
+        </div>
+        <div class="copy">&copy; 2025 MAGNUM FAN Indonesia. All Rights Reserved.</div>
+        <address class="copy">Head Office: Jl. Alaydrus No 84D, Petojo Utara, Kecamatan Gambir, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10130</address>
+        <div class="foot-links">
+          <a href="#promo">Promo</a>
+          <a href="#news">News</a>
+          <a href="#news">Article</a>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-top:0">Ikuti Kami</h3>
+        <div class="socials">
+          <a href="#" aria-label="Instagram">Instagram</a>
+          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="#" aria-label="YouTube">YouTube</a>
+          <a href="#" aria-label="TikTok">TikTok</a>
+        </div>
+        <h3>Online Store</h3>
+        <div class="marketplaces">
+          <a href="#">Tokopedia</a>
+          <a href="#">Shopee</a>
+          <a href="#">TikTok</a>
+          <a href="#">Lazada</a>
+          <a href="#">Informa</a>
+          <a href="#">Blibli</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <script>
+    // Mobile menu placeholder
+    document.getElementById('menuToggle')?.addEventListener('click',()=>alert('Contoh menu mobile. Di WordPress, ganti dengan off-canvas nav.'));
+
+    // Scroll reveal (slow motion)
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target);} });
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // Hero slider autoplay + dots
+    const slides = document.getElementById('slides');
+    const dots = document.querySelectorAll('.dot');
+    const setDot = ()=>{ const idx = Math.round(slides.scrollLeft / slides.clientWidth); dots.forEach(d=>d.classList.remove('active')); dots[idx]?.classList.add('active'); };
+    slides?.addEventListener('scroll',()=>requestAnimationFrame(setDot));
+    dots.forEach(d=>d.addEventListener('click',()=>slides.scrollTo({left:Number(d.dataset.slide)*slides.clientWidth,behavior:'smooth'})));
+    setInterval(()=>{ if(!slides) return; const max = slides.children.length; const idx = Math.round(slides.scrollLeft / slides.clientWidth); const next = (idx+1)%max; slides.scrollTo({left: next*slides.clientWidth, behavior:'smooth'}); }, 6000);
+
+    // Distributor carousel buttons
+    const track = document.getElementById('caroTrack');
+    document.getElementById('caroPrev')?.addEventListener('click',()=>track.scrollBy({left:-track.clientWidth*.8,behavior:'smooth'}));
+    document.getElementById('caroNext')?.addEventListener('click',()=>track.scrollBy({left: track.clientWidth*.8,behavior:'smooth'}));
+
+    // Generate 50+ product placeholders & filtering
+    const all = document.getElementById('allProducts');
+    const cats = ['meja','berdiri','dinding','plafon','industri'];
+    const products = Array.from({length:52}).map((_,i)=>({
+      name:`MAGNUM Series ${i+1}`,
+      cat: cats[i%cats.length],
+      spec:["DC Motor","Low Noise","Energy Save"][i%3]
+    }));
+    function render(list){
+      all.innerHTML = list.map(p=>`
+        <article class=card>
+          <div class=card-inner tabindex=0>
+            <div class="face">
+              <img alt="${p.name}" src="https://picsum.photos/seed/${encodeURIComponent(p.name)}/600/400"/>
+              <div><h3>${p.name}</h3><small class=muted>${p.cat.toUpperCase()}</small></div>
+            </div>
+            <div class="face back">
+              <h3>${p.name}</h3>
+              <ul><li>Kategori: ${p.cat}</li><li>Fitur: ${p.spec}</li><li>Garansi Resmi</li></ul>
+              <a class="btn btn-gold" href="#cari-toko">Beli</a>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+    render(products);
+
+    const search = document.getElementById('search');
+    const chips = document.querySelectorAll('.chip');
+    let activeCat = 'all';
+    function applyFilter(){
+      const q = (search.value||'').toLowerCase();
+      const list = products.filter(p=>{
+        const byCat = activeCat==='all' || p.cat===activeCat;
+        const byText = p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q);
+        return byCat && byText;
+      });
+      render(list);
+    }
+    search?.addEventListener('input', applyFilter);
+    chips.forEach(c=>c.addEventListener('click',()=>{ chips.forEach(x=>x.classList.remove('active')); c.classList.add('active'); activeCat = c.dataset.cat; applyFilter(); }));
+
+    // Accessibility: ENTER to flip when focused
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter' && document.activeElement?.classList.contains('card-inner')){
+        const el = document.activeElement; el.style.transform = el.style.transform ? '' : 'rotateY(180deg)';
+      }
+    });
+  </script>
+</body>
+</html>
